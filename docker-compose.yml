@@ -1,0 +1,60 @@
+version: '2'
+services:
+  hadoop-namenode:
+    image: hadoop-namenode
+    build: ./images/image-namenode
+    container_name: hadoop-namenode
+    hostname: hadoop-namenode
+    environment:
+      - HDFS_REPLICATION_FACTOR=2
+      - HADOOP_NAMENODE_HOST=hadoop-namenode
+    ports: # HOST:CONTAINER
+      - "9870:9870"
+      - "9871:9871"
+    expose:
+      - "9870"
+      - "9871"
+    volumes:
+      - ./volumes/data-namenode:/data
+      - ./volumes/config:/config
+      - ./volumes/code:/opt
+    tty: true
+  hadoop-datanode1:
+    image: hadoop-datanode
+    build: ./images/image-datanode
+    container_name: hadoop-datanode1
+    hostname: hadoop-datanode1
+    environment:
+      - HDFS_REPLICATION_FACTOR=2
+      - HADOOP_NAMENODE_HOST=hadoop-namenode
+    volumes:
+      - ./volumes/data-datanode1:/data
+    tty: true
+    links:
+      - hadoop-namenode
+  hadoop-datanode2:
+    image: hadoop-datanode
+    build: ./images/image-datanode
+    container_name: hadoop-datanode2
+    hostname: hadoop-datanode2
+    environment:
+      - HDFS_REPLICATION_FACTOR=2
+      - HADOOP_NAMENODE_HOST=hadoop-namenode
+    volumes:
+      - ./volumes/data-datanode2:/data
+    tty: true
+    links:
+      - hadoop-namenode
+  hadoop-datanode3:
+    image: hadoop-datanode
+    build: ./images/image-datanode
+    container_name: hadoop-datanode3
+    hostname: hadoop-datanode3
+    environment:
+      - HDFS_REPLICATION_FACTOR=2
+      - HADOOP_NAMENODE_HOST=hadoop-namenode
+    volumes:
+      - ./volumes/data-datanode3:/data
+    tty: true
+    links:
+      - hadoop-namenode
